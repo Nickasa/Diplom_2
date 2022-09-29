@@ -48,14 +48,12 @@ public class LoginTest {
 
     }
 
-    //Тест с разными вариациями логина пользователя с отсутствующими данными
+    //Логин пользователя без почты невозможен
     @Test
-    @DisplayName("Check login attempt with missing credentials and response code/body")
-    public void userWithMissingCredentials() {
+    @DisplayName("Check login attempt without email and response code/body")
+    public void userWithoutEmail() {
         userWithoutEmail = UserGenerator.getGetWithoutEmail();
-        userWithoutPassword = UserGenerator.getWithoutPassword();
 
-        //Логин пользователя без почты невозможен
         ValidatableResponse responseWithoutEmail = userClient.login(UserCredentials.from(userWithoutEmail));
 
         int statusCodeWithoutEmail = responseWithoutEmail.extract().statusCode();
@@ -64,7 +62,14 @@ public class LoginTest {
         String errorMessageWithoutEmail = responseWithoutEmail.extract().path("message");
         assertEquals("Wrong message", "email or password are incorrect", errorMessageWithoutEmail);
 
-        //Логин пользователя без пароля невозможен
+    }
+
+    //Логин пользователя без пароля невозможен
+    @Test
+    @DisplayName("Check login attempt without password and response code/body")
+    public void userWithoutPassword() {
+        userWithoutPassword = UserGenerator.getWithoutPassword();
+
         ValidatableResponse responseWithoutPassword = userClient.login(UserCredentials.from(userWithoutPassword));
 
         int statusCodeWithoutPassword = responseWithoutPassword.extract().statusCode();
@@ -72,7 +77,6 @@ public class LoginTest {
 
         String errorMessageWithoutPassword = responseWithoutPassword.extract().path("message");
         assertEquals("Wrong message", "email or password are incorrect", errorMessageWithoutPassword);
-
     }
 
 }

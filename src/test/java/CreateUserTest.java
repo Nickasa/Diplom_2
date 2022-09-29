@@ -69,16 +69,12 @@ public class CreateUserTest {
         token = rawToken.replaceFirst("Bearer ", "");
     }
 
-    //Тест на невозможность создания пользователя без требуемых полей
+    //Тест на невозможность создания пользователя без полей
     @Test
-    @DisplayName("Check user cannot be created without required fields and response/body")
+    @DisplayName("Check user cannot be created without fields and response/body")
     public void createUserWithoutRequiredFields() {
         userWithoutCredentials = UserGenerator.getEmptyCredentials();
-        userWithoutEmail = UserGenerator.getGetWithoutEmail();
-        userWithoutPassword = UserGenerator.getWithoutPassword();
-        userWithoutName = UserGenerator.getWithoutName();
 
-        //Создание пользователя без полей невозможно
         ValidatableResponse responseWithoutCredentials = userClient.create(userWithoutCredentials);
 
         int statusCodeWithoutCredentials = responseWithoutCredentials.extract().statusCode();
@@ -86,8 +82,14 @@ public class CreateUserTest {
 
         String errorMessageWithoutCredentials = responseWithoutCredentials.extract().path("message");
         assertEquals("Wrong message", "Email, password and name are required fields", errorMessageWithoutCredentials);
+    }
 
-        //Создание пользователя без почты невозможно
+    //Создание пользователя без почты невозможно
+    @Test
+    @DisplayName("Check user cannot be created without email field and response/body")
+    public void createUserWithoutEmailField() {
+        userWithoutEmail = UserGenerator.getGetWithoutEmail();
+
         ValidatableResponse responseWithoutEmail = userClient.create(userWithoutEmail);
 
         int statusCodeWithoutEmail = responseWithoutEmail.extract().statusCode();
@@ -95,8 +97,14 @@ public class CreateUserTest {
 
         String errorMessageWithoutEmail = responseWithoutEmail.extract().path("message");
         assertEquals("Wrong message", "Email, password and name are required fields", errorMessageWithoutEmail);
+    }
 
-        //Создание пользователя без пароля невозможно
+    //Создание пользователя без пароля невозможно
+    @Test
+    @DisplayName("Check user cannot be created without password field and response/body")
+    public void createUserWithoutPasswordField() {
+        userWithoutPassword = UserGenerator.getWithoutPassword();
+
         ValidatableResponse responseWithoutPassword = userClient.create(userWithoutPassword);
 
         int statusCodeWithoutPassword = responseWithoutPassword.extract().statusCode();
@@ -104,8 +112,14 @@ public class CreateUserTest {
 
         String errorMessageWithoutPassword = responseWithoutPassword.extract().path("message");
         assertEquals("Wrong message", "Email, password and name are required fields", errorMessageWithoutPassword);
+    }
 
-        //Создание пользователя без имени невозможно
+    //Создание пользователя без имени невозможно
+    @Test
+    @DisplayName("Check user cannot be created without name field and response/body")
+    public void createUserWithoutName() {
+        userWithoutName = UserGenerator.getWithoutName();
+
         ValidatableResponse responseWithoutName = userClient.create(userWithoutName);
 
         int statusCodeWithoutName = responseWithoutName.extract().statusCode();
